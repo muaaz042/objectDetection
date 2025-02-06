@@ -3,6 +3,7 @@ import React, { useRef, useEffect } from "react";
 import * as tf from "@tensorflow/tfjs";
 import * as cocossd from "@tensorflow-models/coco-ssd";
 import Webcam from "react-webcam";
+import { drawRect } from "./utilities";
 import "./App.css";
 
 function App() {
@@ -39,10 +40,11 @@ function App() {
 
       // Use the model from the ref
       const obj = await modelRef.current.detect(video);
-      console.log(obj);
-
       const ctx = canvasRef.current.getContext("2d");
       // TODO: Add your drawing function here
+
+      drawRect(obj,ctx);
+
     }
   };
 
@@ -54,6 +56,9 @@ function App() {
     <div className="App">
       <header className="App-header">
         <Webcam
+          videoConstraints={{
+            facingMode:"environment"
+          }}
           ref={webcamRef}
           muted={true}
           style={{
